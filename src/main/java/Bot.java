@@ -4,7 +4,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
-    private final static String token = "875607078:AAEY9iulL8uKhFANLXoRft5RLSeosAMWvAU";
+    private final static String token = "";
 
 
     public void onUpdateReceived(Update update) {
