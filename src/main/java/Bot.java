@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
+
     private final static String TOKEN = "";
 
 
