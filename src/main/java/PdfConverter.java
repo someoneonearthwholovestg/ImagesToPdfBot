@@ -22,36 +22,14 @@ import java.util.stream.Stream;
  * This class convert Images to PDF file
  **/
 public class PdfConverter {
-    private PdfConverter() {
+    public static final String DEST = "./src/main/resources/pdf/imagesToPdf.pdf";
+    public static final String ORIGIN = "./src/main/resources/img";
+    private static final List<String> FORMATS = List.of(".png", ".jpg", ".jpeg");
+
+     private PdfConverter() {
         assert false;
     }
-
-    public static final String DEST = "./src/main/resources/pdf/imagesToPdf.pdf";
-    public static final String IMG1 = "./src/main/resources/img/f.jpg";
-    public static final String IMG2 = "./src/main/resources/img/s.jpg";
-    public static final String ORIGIN = "./src/main/resources/img";
-    private static final List<String> FORMATS = List.of(".png", ".jpg");
-
-    public static void main(String[] args) throws Exception {
-        File file = new File(DEST);
-        file.getParentFile().mkdirs();
-        manipulatePdf(List.of(IMG1, IMG2));
-//        manipulatePdf(DEST);
-    }
-
-//    public static void manipulatePdf(String dest) {
-//
-//        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
-//             Document doc = new Document(pdfDoc)) {
-//
-//            doc.add(new Image(ImageDataFactory.create(IMG1)));
-//            doc.add(new Image(ImageDataFactory.create(IMG2)));
-//
-//        } catch (FileNotFoundException | MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
+    
     /**
      * @param images images file addresses
      *               Use this method to generate images to pdf file
@@ -89,7 +67,7 @@ public class PdfConverter {
         try (Stream<Path> files = Files.list(origin.toPath())) {
             List<String> imagesPath = files
                     .map(Path::toString)
-                    .filter(f -> f.matches(".*\\.jp[e]?g$") || f.matches(".*\\.jpg$"))
+                    .filter(f -> f.matches(".*\\.jp[e]?g$") || f.matches(".*\\.png$"))
                     .collect(Collectors.toCollection(ArrayList::new));
 
             manipulatePdf(imagesPath, dest);
@@ -101,7 +79,6 @@ public class PdfConverter {
 
     public static void manipulatePdf(String originDir) throws NotDirectoryException {
         manipulatePdf(originDir, DEST);
-
     }
 
     private static void rotateImage(String img) {
