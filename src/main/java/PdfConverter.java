@@ -10,8 +10,14 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.List;
 
-
+/**
+ * @author Morteza Taghaddomi
+ * This class convert Images to PDF file
+ **/
 public class PdfConverter {
+    private PdfConverter() {
+        assert false;
+    }
 
     private static final String DEST = "./target/test/resources/sandbox/tables/imagesToPdf.pdf";
     private static final String IMG1 = "./src/main/resources/img/f.jpg";
@@ -20,10 +26,11 @@ public class PdfConverter {
     public static void main(String[] args) throws Exception {
         File file = new File(DEST);
         file.getParentFile().mkdirs();
-        new PdfConverter().manipulatePdf(DEST);
+        manipulatePdf(List.of(IMG1, IMG2));
+//        manipulatePdf(DEST);
     }
 
-    public void manipulatePdf(String dest) {
+    public static void manipulatePdf(String dest) {
 
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(dest));
              Document doc = new Document(pdfDoc)) {
@@ -36,36 +43,34 @@ public class PdfConverter {
         }
     }
 
-    public void manipulatePdf(List<String> images) {
-        Document doc = null;
-        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(DEST))) {
-            doc = new Document(pdfDoc);
+    public static void manipulatePdf(List<String> images) {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(DEST));
+             Document doc = new Document(pdfDoc)) {
+
+            for (String img : images) {
+                try {
+                    doc.add(new Image(ImageDataFactory.create(img)));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (String img : images) {
-            try {
-                if (doc != null) {
-                    doc.add(new Image(ImageDataFactory.create(img)));
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 
 
-    private void rotateImage(String img) {
+    private static void rotateImage(String img) {
         // TODO: 4/1/2019
         //  All Image should be vertical
     }
 
-    private void scaleImage(String img){
+    private static void scaleImage(String img) {
         // TODO: 4/1/2019 scale images to be same size
     }
-
 
 
 }
