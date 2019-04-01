@@ -1,7 +1,7 @@
 # ImagesToPdfBot
 this is a telegram bot project. Send images and get the images' PDF. 
 
-## Used Libraries: 
+## Libraries: 
 <ol>
   <li>Java SE Development Kit 11</li>
   <li>https://github.com/rubenlagus/TelegramBots77</li>
