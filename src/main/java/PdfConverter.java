@@ -1,7 +1,11 @@
 
+import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.AffineTransform;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 
@@ -26,10 +30,10 @@ public class PdfConverter {
     public static final String ORIGIN = "./src/main/resources/img";
     private static final List<String> FORMATS = List.of(".png", ".jpg", ".jpeg");
 
-     private PdfConverter() {
+    private PdfConverter() {
         assert false;
     }
-    
+
     /**
      * @param images images file addresses
      *               Use this method to generate images to pdf file
@@ -81,9 +85,55 @@ public class PdfConverter {
         manipulatePdf(originDir, DEST);
     }
 
-    private static void rotateImage(String img) {
-        // TODO: 4/1/2019
-        //  All Image should be vertical
+    private static void rotateImage(Image img, double degree) {
+        Image image = img.setRotationAngle(degree * 10);
+
+    }
+
+    public static void rotateImage(String img, Rotate degree) throws FileNotFoundException, MalformedURLException {
+        File imageFile = new File(img);
+        if (!imageFile.exists()) {
+            throw new FileNotFoundException("This image do not exist");
+        }
+
+        Image image = new Image(ImageDataFactory.create(img));
+
+        if (degree == Rotate.RIGHT) {
+            rotateImage(image, 90.0);
+        } else if (degree == Rotate.LEFT) {
+            rotateImage(image, -90.0);
+        }
+    }
+
+    public static void addImageToPdf(String img, String pdf) {
+
+
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfReader("C:\\Users\\ASUS\\Desktop\\Programming\\ImagesToPdfBot\\src\\main\\resources\\pdf\\res.pdf")
+                , new PdfWriter(pdf));
+             Document doc = new Document(pdfDoc)) {
+            ImageData imageData = ImageDataFactory.create(img);
+            Image image = new Image(imageData);
+
+
+            AffineTransform at = AffineTransform.getTranslateInstance(36, 300);
+            at.concatenate(AffineTransform.getScaleInstance(image.getImageScaledWidth(),
+                    image.getImageScaledHeight()));
+
+            PdfCanvas canvas = new PdfCanvas(pdfDoc.getFirstPage());
+            float[] matrix = new float[6];
+            at.getMatrix(matrix);
+            canvas.addImage(imageData, matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
+            addImageToPdf(image, doc);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void addImageToPdf(Image img, Document pdf) {
+        pdf.add(img);
+        pdf.flush();
     }
 
     private static void scaleImage(String img) {
