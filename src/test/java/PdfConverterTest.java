@@ -1,4 +1,6 @@
 import org.junit.Test;
+import telegram.bot.pdf.PdfConverter;
+import telegram.bot.pdf.Rotate;
 
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
