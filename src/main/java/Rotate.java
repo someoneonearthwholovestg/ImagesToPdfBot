@@ -1,3 +1,3 @@
-public enum Rotate {
+public enum Rotate {    
     RIGHT, LEFT,
 }
